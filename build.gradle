@@ -8,4 +8,5 @@ repositories {
 
 dependencies {
     implementation 'com.google.guava:guava:25.1-jre'
+    implementation 'org.jgrapht:jgrapht-core:1.2.0'
 }

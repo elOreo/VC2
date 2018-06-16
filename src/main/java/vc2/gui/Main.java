@@ -1,7 +1,7 @@
 package vc2.gui;
 
 import vc2.data.Loader;
-
+import java.util.Arrays;
 
 
 
@@ -16,10 +16,10 @@ import vc2.data.Loader;
  * @author Tobias
  */
 public class Main {
-       
+
     public static void main(String args[]){
-        Loader.loadData().ifPresent(data->System.out.println(data));
-        
+        Loader.loadData().ifPresent(data->data.forEach(adult->System.out.println(Arrays.toString(adult.getVector()))));
+
     }
-    
+
 }

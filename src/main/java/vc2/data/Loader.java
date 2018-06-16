@@ -23,11 +23,11 @@ import vc2.gui.Main;
  * @author Tobias
  */
 public final class Loader {
-   
+
     private Loader(){
-    
+
     }
-    
+
     public static Optional<Collection<Adult>> loadData(){
          try {
             URL url = Resources.getResource("adult.data");
@@ -35,6 +35,7 @@ public final class Loader {
             List<Adult> entries = Splitter.on("\n").omitEmptyStrings().splitToList(text)
                     .stream()
                     .map(entry -> entry.split(", "))
+                    //.map(x -> {System.out.println(x.length); return x;})
                     .map(Adult::new)
                     .collect(Collectors.toList());
             return Optional.of(entries);
