@@ -7,7 +7,7 @@ import java.util.Set;
 public class Network {
     private final NetworkTopology topology;
     private final NetworkWeights weights;
-
+    
     public Network(NetworkTopology topology){
         this.topology = topology;
         this.weights = new NetworkWeights();
@@ -35,4 +35,10 @@ public class Network {
         return map;
         
     }
+    
+    /*public Map<Neuron, Double> backwardPropagation(double[] input){
+        
+        Map<Neuron, Double> map = topology.forwardPropagation(input);
+        return map;
+    }*/
 }
