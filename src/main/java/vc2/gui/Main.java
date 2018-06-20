@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import com.google.common.io.Resources;
 import java.net.URL;
+import java.util.Map;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.event.EventHandler;
@@ -21,6 +22,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import vc2.backprop.InputNeuron;
+import vc2.backprop.Network;
+import vc2.backprop.NetworkTopology;
+import vc2.backprop.Neuron;
+import vc2.backprop.SigmoidNeuron;
 
 
 
@@ -34,19 +40,31 @@ import javafx.stage.Stage;
  *
  * @author Tobias
  */
-public class Main extends Application {
+public class Main {
 
-    public static void main(String args[], Stage stage) throws Exception{
-        Loader.loadData().ifPresent(data->data.forEach(adult->System.out.println(Arrays.toString(adult.getVector()))));
-        launch(args);
+    
+    public static void main(String args[]) throws Exception{
+        //Loader.loadData().ifPresent(data->data.forEach(adult->System.out.println(Arrays.toString(adult.getVector()))));
+        //launch(args);
         
-
+        Neuron in = new InputNeuron(0);
+        Neuron out = new SigmoidNeuron();
+        NetworkTopology ntp = NetworkTopology.createFactory()
+                .addNeuron(in)
+                .addOutputNeuron(out, 0)
+                .addAxon(in, out)
+                .build();
+        Network nw = new Network(ntp);
+        Map xy = nw.forwardPropagation(new double[]{0.5});
+        
+        System.out.println(nw.backwardPropagation(new double[]{0.5}, new double[]{0.5}));
         
     }
     
-    @Override
+    //@Override
     public void start(Stage stage) throws Exception{
-        
+        System.out.print("asd");
+        /*
         URL mainWindow = Resources.getResource("PerceptronicPro.fxml");
         Parent root = FXMLLoader.load(mainWindow);
        
@@ -64,113 +82,7 @@ public class Main extends Application {
         stage.setTitle("PercepronicPro");
         stage.setScene(scene);
         stage.show();
-        
-       
-        
-        
-        
-        
-        final Circle source = new Circle();
-        final Pane target = new Pane();
-       
-        
-        
-         source.setOnDragDetected(new EventHandler <MouseEvent>() {
-            public void handle(MouseEvent event) {
-                /* drag was detected, start drag-and-drop gesture*/
-                System.out.println("onDragDetected");
-                
-                /* allow any transfer mode */
-                Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-                
-                /* put a string on dragboard */
-                ClipboardContent content = new ClipboardContent();
-                
-                db.setContent(content);
-                
-                event.consume();
-            }
-        });
-
-        target.setOnDragOver(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* data is dragged over the target */
-                System.out.println("onDragOver");
-                
-                /* accept it only if it is  not dragged from the same node 
-                 * and if it has a string data */
-                if (event.getGestureSource() != target &&
-                        event.getDragboard().hasString()) {
-                    /* allow for both copying and moving, whatever user chooses */
-                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                }
-                
-                event.consume();
-            }
-        });
-
-        target.setOnDragEntered(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* the drag-and-drop gesture entered the target */
-                System.out.println("onDragEntered");
-                /* show to the user that it is an actual gesture target */
-                if (event.getGestureSource() != target &&
-                        event.getDragboard().hasString()) {
-                   
-                }
-                
-                event.consume();
-            }
-        });
-
-        target.setOnDragExited(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* mouse moved away, remove the graphical cues */
-                
-                
-                event.consume();
-            }
-        });
-        
-        target.setOnDragDropped(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* data dropped */
-                System.out.println("onDragDropped");
-                /* if there is a string data on dragboard, read it and use it */
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasString()) {
-                   
-                    success = true;
-                }
-                /* let the source know whether the string was successfully 
-                 * transferred and used */
-                event.setDropCompleted(success);
-                
-                event.consume();
-            }
-        });
-
-        source.setOnDragDone(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* the drag-and-drop gesture ended */
-                System.out.println("onDragDone");
-                /* if the data was successfully moved, clear it */
-                if (event.getTransferMode() == TransferMode.MOVE) {
-                    
-                }
-                
-                event.consume();
-            }
-        });
-
-       
-        stage.setScene(scene);
-        stage.show();
-        
-        
-        
-        
+        */   
     }
 
 }
