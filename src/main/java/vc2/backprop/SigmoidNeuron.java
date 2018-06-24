@@ -16,4 +16,9 @@ public class SigmoidNeuron implements Neuron{
         return 1/(1 + Math.exp(-input));
     }
     
+    @Override
+    public double derivative(double input){
+        double activation = activate(input);
+        return activation * (1 - activation);
+    }
 }

@@ -23,4 +23,9 @@ public class InputNeuron implements Neuron{
         throw new UnsupportedOperationException("Not supported");
     }
     
+    @Override
+    public double derivative(double input){
+        
+        return 0;
+    }
 }

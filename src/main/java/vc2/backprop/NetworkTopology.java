@@ -1,8 +1,9 @@
 package vc2.backprop;
 
 
+import com.google.common.collect.Lists;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -13,18 +14,26 @@ public class NetworkTopology {
 
     private final DirectedAcyclicGraph<Neuron, Axon> graph;
     private final Neuron[] outputs; 
+    private final List<Neuron> neurons;
+    private final List<Neuron> reverseNeurons;
 
     private NetworkTopology(DirectedAcyclicGraph<Neuron, Axon> graph, Neuron[] outputs){
         this.graph = graph;
         this.outputs = outputs;
+        this.neurons = Lists.newArrayList(this.graph.iterator());
+        this.reverseNeurons = Lists.reverse(neurons);
     }
 
     public Set<Axon> getAxons(){
         return this.graph.edgeSet();
     }
     
-    public Iterator<Neuron> getNeurons(){
-        return this.graph.iterator();
+    public List<Neuron> getNeurons(){
+        return neurons;
+    }
+    
+    public List<Neuron> getReverseNeurons(){
+        return reverseNeurons;
     }
     
     public Neuron[] getOutputs(){
@@ -48,7 +57,7 @@ public class NetworkTopology {
         private final Map<Neuron, Integer> outputs = new HashMap<>();
         private final GraphBuilder<Neuron, Axon, ? extends DirectedAcyclicGraph<Neuron, Axon>> builder = DirectedAcyclicGraph.createBuilder((Supplier<Axon>)Axon::new);
         private NetworkTopologyFactory(){
-            builder.addVertex(ConstantNeuron.neuron);
+            builder.addVertex(ConstantNeuron.NEURON);
         }
         
         public NetworkTopology build(){
@@ -59,7 +68,7 @@ public class NetworkTopology {
         
         public NetworkTopologyFactory addNeuron(Neuron neuron){
             builder.addVertex(neuron);
-            addAxon(ConstantNeuron.neuron, neuron);
+            addAxon(ConstantNeuron.NEURON, neuron);
             return this;
         }
         public NetworkTopologyFactory addOutputNeuron(Neuron neuron, int index){
