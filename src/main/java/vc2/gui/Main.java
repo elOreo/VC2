@@ -1,5 +1,6 @@
 package vc2.gui;
 
+import com.google.common.collect.Lists;
 import vc2.gui.Controller;
 import vc2.data.Loader;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import vc2.backprop.Network;
 import vc2.backprop.NetworkTopology;
 import vc2.backprop.Neuron;
 import vc2.backprop.SigmoidNeuron;
+import vc2.backprop.TrainingInput;
 
 
 
@@ -55,10 +57,11 @@ public class Main {
                 .addAxon(in, out)
                 .build();
         Network nw = new Network(ntp);
-        Map xy = nw.forwardPropagation(new double[]{0.5});
+        double[] xy = nw.predict(new double[]{0.5});
         
-        System.out.println(nw.backwardPropagation(new double[]{0.5}, new double[]{0.5}));
+        double iwas = nw.learnConverge(0.001, 10000, 0.001, Lists.newArrayList(new TrainingInput(new double[]{0.5}, new double[]{1})));
         
+        double[] xy2 = nw.predict(new double[]{0.5});
     }
     
     //@Override
