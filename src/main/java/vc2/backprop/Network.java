@@ -1,9 +1,11 @@
 package vc2.backprop;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -23,7 +25,7 @@ public class Network {
     
     
     public final void initalizeWeights(){
-        topology.getAxons().stream().forEach(axon -> weights.put(axon, 2 * Math.random()-1));
+        topology.getAxons().stream().forEach(axon -> weights.put(axon, Math.random()));
     }
     
     public Map<Neuron, Double> forwardPropagation(double[] input){
@@ -34,10 +36,11 @@ public class Network {
                 map.put(inputNeuron, input[inputNeuron.index]);
                 continue;
             }
-            Set<Neuron> ancestors = topology.getAncestors(neuron);
-            double weightedSum = ancestors.stream()
-                    .map(ancestor -> map.get(ancestor)*weights.get(topology.getEdge(ancestor, neuron)))
-                    .reduce(.0 , (a , b) -> a + b);
+            Set<Axon> ancestorAxons = topology.getAncestorAxons(neuron);
+            
+            double weightedSum = ancestorAxons.stream()
+                    .map(ancestorAxon -> map.get(ancestorAxon.getSource())*weights.get(ancestorAxon))
+                    .reduce(.0, (a , b) -> a + b);
             map.put(neuron, neuron.activate(weightedSum));
         }
         return map;
@@ -74,40 +77,42 @@ public class Network {
         
         for(int i=0; i < predictedOutput.length ;i++){
             double error = expectedOutput[i] - predictedOutput[i];
-            errorMap.put(outputs[i] , error);   
+            errorMap.put(outputs[i] , error);
         }
         
         for(Neuron neuron : topology.getReverseNeurons()){
             double activationError = errorMap.get(neuron);
             double inputError = activationError * neuron.derivative(activationMap.get(neuron));
-            Set<Neuron> ancestors = topology.getAncestors(neuron);
             
-            for(Neuron ancestor : ancestors){
+            Set<Axon> ancestorAxons = topology.getAncestorAxons(neuron);
+           
+            for(Axon ancestorAxon : ancestorAxons){
+                Neuron ancestor = ancestorAxon.getSource();
                 double weightChange = inputError * activationMap.get(ancestor);
                 double tempError = errorMap.getOrDefault(ancestor, .0);
-                Axon axon = topology.getEdge(ancestor, neuron);
-                double weight = weights.get(axon);
-                errorMap.put(ancestor, tempError + weight - activationError);
-                weightChangeMap.put(axon, weightChange);
+                double weight = weights.get(ancestorAxon);
+                errorMap.put(ancestor, tempError + weight * activationError);
+                weightChangeMap.put(ancestorAxon, weightChange);
             }
         }
         
         return weightChangeMap;
     }
    
-    public double learn(double learnFactor, ArrayList<TrainingInput> trainingInputs){
+    public double learn(double learnFactor, List<TrainingInput> trainingInputs){
         Map<Axon, Double> weightChangeMapSum = trainingInputs.parallelStream()
                 .map(this::backwardPropagation)
                 .collect(HashMap::new, mergeWeights, mergeWeights);
         
-        int inputSize = trainingInputs.size();
-        MapUtils.<Axon, Double>mergeMaps((a, b) -> a + learnFactor * b / inputSize).accept(weights, weightChangeMapSum);
+        double normalizedLearnFactor = learnFactor / trainingInputs.size();
+        MapUtils.<Axon, Double>mergeMaps((a, b) -> a + normalizedLearnFactor * b).accept(weights, weightChangeMapSum);
         return weightChangeMapSum.values().stream().map(x -> x*x).reduce(.0, (a, b) -> a + b);
     }
     
     public double learnConverge(double threshold, int maxIterations, double learnFactor, ArrayList<TrainingInput> trainingInputs){
         double result = Double.POSITIVE_INFINITY;
         int i = 0;
+        int inputSize = trainingInputs.size();
         while(result > threshold && i++ < maxIterations){
             result = learn(learnFactor, trainingInputs);
         }

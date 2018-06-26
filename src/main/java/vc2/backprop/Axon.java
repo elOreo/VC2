@@ -1,8 +1,8 @@
 package vc2.backprop;
 
 public class Axon {
-    public final Neuron source;
-    public final Neuron target;
+    private final Neuron source;
+    private final Neuron target;
     
     public Axon(Neuron source, Neuron target){
         this.source = source;
@@ -17,4 +17,13 @@ public class Axon {
     public String toString(){
         return "["+ source + " -> " + target + "]";
     }
+    
+    public Neuron getSource(){
+        return this.source;
+    }
+    
+    public Neuron getTarget(){
+        return this.target;
+    }
+    
 }

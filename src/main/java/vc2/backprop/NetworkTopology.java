@@ -40,8 +40,8 @@ public class NetworkTopology {
         return this.outputs;
     }
             
-    public Set<Neuron> getAncestors(Neuron neuron){
-        return this.graph.getAncestors(neuron);
+    public Set<Axon> getAncestorAxons(Neuron neuron){
+        return this.graph.incomingEdgesOf(neuron);
     }
     
     public Axon getEdge(Neuron sourceNeuron, Neuron targetNeuron){

@@ -9,7 +9,7 @@ package vc2.backprop;
  *
  * @author Tobias
  */
-public class TrainingInput {
+public class TrainingInput{
  
     private final double[] in;
     private final double[] out;

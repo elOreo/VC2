@@ -9,15 +9,18 @@ package vc2.backprop;
  *
  * @author Tobias
  */
-public class SigmoidNeuron implements Neuron{
-
-    @Override
-    public double activate(double input) {
-        return 1/(1 + Math.exp(-input));
-    }
+public class TanhNeuron implements Neuron {
     
     @Override
-    public double derivative(double input){
-        return input * (1 - input);
+    public double activate(double input) {
+        double ePos = Math.exp(input);
+        double eNeg = Math.exp(-input);
+        return (ePos - eNeg) / (ePos + eNeg);
     }
+
+    @Override
+    public double derivative(double input) {
+        return 1 - input * input;
+    }
+    
 }
