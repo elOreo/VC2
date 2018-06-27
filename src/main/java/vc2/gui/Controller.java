@@ -9,6 +9,7 @@
 package vc2.gui;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +22,9 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -44,6 +47,12 @@ public class Controller implements Initializable {
     private Circle neuronCircleSigmoid;
     @FXML
     private Circle neuronCircleTanh;
+    @FXML
+    private Button btnAddLayer;
+    @FXML
+    private Pane leftPane; 
+    @FXML
+    private HBox layerBox;
     
     
     /**
@@ -53,7 +62,13 @@ public class Controller implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Layer input = new Layer();
+        input.addNeuron(NeuronType.Input);
+        input.addNeuron(NeuronType.Input);
+        Layer output = new Layer();
+        output.addNeuron(NeuronType.TanH);
+        layerBox.getChildren().add(input);
+        layerBox.getChildren().add(output);
     }    
     
     
@@ -84,10 +99,8 @@ public class Controller implements Initializable {
         boolean success = false;
         if (db.hasString()) {
             if (db.getString().equals("neuronCircleSigmoid")) {
-                Circle c = new Circle(event.getX(), event.getY(), 20, Color.BLUE);
-                c.setFill(Color.web("#9fbcd7"));
-                c.setStroke(Color.web("#3c43bf"));
-                midAnchorPane.getChildren().add(c);
+                
+                
                 success = true;
             } else if (db.getString().equals("neuronCircleReLU")) {
                 Circle c = new Circle(event.getX(), event.getY(), 20, Color.RED);
@@ -111,7 +124,7 @@ public class Controller implements Initializable {
     @FXML
     private void circleSigmoidDragDetected(MouseEvent event) {
         Dragboard db = neuronCircleSigmoid.startDragAndDrop(TransferMode.ANY);
-
+        System.out.println("Hallo");
         ClipboardContent content = new ClipboardContent();
         content.putString("neuronCircleSigmoid");
         db.setContent(content);
@@ -153,6 +166,12 @@ public class Controller implements Initializable {
     @FXML
     private void circleDragDone(DragEvent event) {
         event.consume();
+    }
+   
+    @FXML
+    private void addLayer(MouseEvent event){
+        Layer layer = new Layer();
+        layerBox.getChildren().add(layer);
     }
        
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -46,97 +45,125 @@
          <tabs>
             <Tab closable="false" text="Trainieren">
                <content>
-                  <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0">
+                  <BorderPane>
                      <left>
-                        <Pane fx:id="leftPane" prefHeight="1055.0" prefWidth="244.0">
+                      <AnchorPane>
                            <children>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="527.0" prefWidth="239.0">
+                              <VBox layoutX="22.0" layoutY="5.0">
                                  <children>
-                                    <Label layoutX="21.0" layoutY="86.0" prefHeight="27.0" prefWidth="81.0" text="Lernrate">
+                                    <Separator prefHeight="17.0" prefWidth="213.0" />
+                                    <Label prefHeight="27.0" prefWidth="81.0" text="Lernrate">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Slider layoutX="19.0" layoutY="130.0" prefHeight="17.0" prefWidth="198.0" />
-                                    <Label layoutX="19.0" layoutY="25.0" prefHeight="21.0" prefWidth="117.0" text="Einstellungen">
+                                    <Slider prefHeight="17.0" prefWidth="198.0" />
+                                    <Label prefHeight="21.0" prefWidth="117.0" text="Einstellungen">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label layoutX="14.0" layoutY="188.0" prefHeight="57.0" prefWidth="198.0" text="Abbruch bei Fehlern kleiner als" wrapText="true">
+                                    <Label prefHeight="57.0" prefWidth="198.0" text="Abbruch bei Fehlern kleiner als" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Slider layoutX="19.0" layoutY="264.0" prefHeight="17.0" prefWidth="198.0" />
-                                    <Separator layoutX="20.0" layoutY="172.0" prefWidth="200.0" />
-                                    <Separator layoutX="20.0" layoutY="308.0" prefWidth="200.0" />
-                                    <Label layoutX="14.0" layoutY="317.0" prefHeight="58.0" prefWidth="132.0" text="Maximale Itterationen" wrapText="true">
+                                    <Slider prefHeight="17.0" prefWidth="198.0" />
+                                    <Separator prefWidth="200.0" />
+                                    <Separator prefWidth="200.0" />
+                                    <Label prefHeight="58.0" prefWidth="132.0" text="Maximale Itterationen" wrapText="true">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </Label>
-                                    <Slider layoutX="21.0" layoutY="391.0" prefHeight="17.0" prefWidth="198.0" />
-                                    <TextField layoutX="113.0" layoutY="217.0" prefHeight="31.0" prefWidth="62.0" />
-                                    <TextField layoutX="113.0" layoutY="84.0" prefHeight="31.0" prefWidth="57.0" />
-                                    <TextField layoutX="115.0" layoutY="339.0" prefHeight="31.0" prefWidth="62.0" />
-                                    <Separator layoutX="16.0" layoutY="436.0" prefWidth="200.0" />
+                                    <Slider prefHeight="17.0" prefWidth="198.0" />
+                                    <TextField prefHeight="31.0" prefWidth="62.0" />
+                                    <TextField prefHeight="31.0" prefWidth="57.0" />
+                                    <TextField prefHeight="31.0" prefWidth="62.0" />
+                                    <Separator prefWidth="200.0" />
+                                    <Button fx:id="btnAdd" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#btnAdd" prefHeight="38.0" prefWidth="194.0" text="Hidden Layer hinzufügen" textAlignment="CENTER" />
+                                    <Circle fx:id="neuronCircleSigmoid" fill="#9fbcd7" onDragDetected="#circleSigmoidDragDetected" onDragDone="#circleDragDone" radius="34.0" stroke="#3c43bf" strokeType="INSIDE" strokeWidth="5.0">
+                              </Circle>
+                                    <Circle fx:id="neuronCircleTanh" fill="#7ddd42" onDragDetected="#circleTanhDragDetected" onDragDone="#circleDragDone" radius="34.0" stroke="#275700" strokeType="INSIDE" strokeWidth="5.0">
+
+                              </Circle>
+                                    <Circle fx:id="neuronCircleReLU" fill="#f53857" onDragDetected="#circleReLUDragDetected" onDragDone="#circleDragDone" radius="34.0" stroke="#800822" strokeType="INSIDE" strokeWidth="5.0">
+                              </Circle>
+                                    <Label text="ReLUfunktion:" />
+                                    <Label prefHeight="34.0" prefWidth="117.0" text="Sigmoidfunktion:" />
+                                    <Label prefHeight="34.0" prefWidth="152.0" text="Tangens Hyperbolicus:" />
+                                    <Label prefHeight="21.0" prefWidth="117.0" text="Neuronen">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Button mnemonicParsing="false" prefHeight="67.0" prefWidth="185.0" text="Training starten">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </Button>
                                  </children>
-                              </AnchorPane>
-                              <Label layoutX="14.0" layoutY="569.0" prefHeight="21.0" prefWidth="117.0" text="Neuronen">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Circle fx:id="neuronCircleSigmoid" fill="#9fbcd7" layoutX="203.0" layoutY="751.0" onDragDetected="#circleSigmoidDragDetected" onDragDone="#circleDragDone" radius="34.0" stroke="#3c43bf" strokeType="INSIDE" strokeWidth="5.0">
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                              </Circle>
-                              <Button layoutX="26.0" layoutY="890.0" mnemonicParsing="false" prefHeight="65.0" prefWidth="193.0" text="Training starten">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Button>
-                              <Label layoutX="14.0" layoutY="734.0" prefHeight="34.0" prefWidth="117.0" text="Sigmoidfunktion:" />
-                              <Circle fx:id="neuronCircleReLU" fill="#f53857" layoutX="203.0" layoutY="827.0" onDragDetected="#circleReLUDragDetected" onDragDone="#circleDragDone" radius="34.0" stroke="#800822" strokeType="INSIDE" strokeWidth="5.0">
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                              </Circle>
-                              <Label layoutX="14.0" layoutY="819.0" text="ReLUfunktion:" />
-                              <Label layoutX="12.0" layoutY="648.0" prefHeight="34.0" prefWidth="152.0" text="Tangens Hyperbolicus:" />
-                              <Circle fx:id="neuronCircleTanh" fill="#7ddd42" layoutX="203.0" layoutY="665.0" onDragDetected="#circleTanhDragDetected" onDragDone="#circleDragDone" radius="34.0" stroke="#275700" strokeType="INSIDE" strokeWidth="5.0">
-                                 <cursor>
-                                    <Cursor fx:constant="DEFAULT" />
-                                 </cursor>
-                              </Circle>
-                              <Separator layoutX="22.0" layoutY="872.0" prefWidth="200.0" />
+                              </VBox>
                            </children>
-                           <BorderPane.margin>
-                              <Insets />
-                           </BorderPane.margin>
-                        </Pane>
+                        </AnchorPane>
                      </left>
                      <right>
-                        <Pane prefHeight="1049.0" prefWidth="1491.0" BorderPane.alignment="CENTER">
+                        <AnchorPane />
+                     </right>
+                     <center>
+                        <AnchorPane BorderPane.alignment="CENTER">
                            <children>
-                              <ScrollPane prefHeight="1046.0" prefWidth="1493.0">
-                                <content>
-                                  <AnchorPane fx:id="midAnchorPane" minHeight="0.0" minWidth="0.0" onDragDropped="#onDragDropped" onDragEntered="#onDragEntered" onDragExited="#onDragExited" onDragOver="#onDragOver" prefHeight="1044.0" prefWidth="1490.0">
+                              <BorderPane layoutX="1497.0">
+                                 <left>
+                                    <VBox alignment="CENTER" prefHeight="1140.0" prefWidth="171.0" spacing="30.0" BorderPane.alignment="CENTER">
                                        <children>
-                                          <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" text="Hidden Layers">
+                                          <RadioButton mnemonicParsing="false" text="Input 1">
                                              <font>
                                                 <Font size="18.0" />
                                              </font>
-                                          </Label>
-                                          <Separator layoutX="1242.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="1046.0" prefWidth="21.0" />
-                                          <Button alignment="CENTER" contentDisplay="CENTER" layoutX="698.0" layoutY="490.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="82.0" text="+" textAlignment="CENTER">
+                                          </RadioButton>
+                                          <RadioButton layoutX="56.0" layoutY="386.0" mnemonicParsing="false" text="Input 2">
                                              <font>
-                                                <Font size="30.0" />
+                                                <Font size="18.0" />
                                              </font>
-                                          </Button>
-                                          <VBox alignment="CENTER" layoutX="1270.0" layoutY="20.0" prefHeight="1080.0" prefWidth="174.0" spacing="30.0">
+                                          </RadioButton>
+                                          <RadioButton layoutX="44.0" layoutY="449.0" mnemonicParsing="false" text="Input 3">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </RadioButton>
+                                          <RadioButton layoutX="44.0" layoutY="423.0" mnemonicParsing="false" text="Input 4">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </RadioButton>
+                                          <RadioButton layoutX="56.0" layoutY="410.0" mnemonicParsing="false" text="Input 5">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </RadioButton>
+                                          <RadioButton layoutX="56.0" layoutY="363.0" mnemonicParsing="false" text="Input 6">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </RadioButton>
+                                       </children>
+                                    </VBox>
+                                 </left>
+                                 <center>
+                                    <ScrollPane prefHeight="1155.0" prefViewportHeight="100.0" prefViewportWidth="200.0" prefWidth="1274.0" BorderPane.alignment="CENTER">
+                                       <content>
+                                          <HBox alignment="CENTER" prefHeight="1010.0" prefWidth="1016.0" />
+                                       </content>
+                                    </ScrollPane>
+                                 </center>
+                                 <right>
+                                    <AnchorPane prefHeight="1140.0" prefWidth="178.0" BorderPane.alignment="CENTER">
+                                       <padding>
+                                          <Insets bottom="60.0" />
+                                       </padding>
+                                       <children>
+                                          <VBox alignment="CENTER" prefHeight="1080.0" prefWidth="174.0" spacing="30.0">
                                              <children>
                                                 <RadioButton mnemonicParsing="false" text="Output 1">
                                                    <font>
@@ -172,53 +199,18 @@
                                           </VBox>
                                        </children>
                                     </AnchorPane>
-                                </content>
-                              </ScrollPane>
-                              <AnchorPane>
-                                 <padding>
-                                    <Insets bottom="60.0" />
-                                 </padding>
-                              </AnchorPane>
-                           </children>
-                        </Pane>
-                     </right>
-                     <center>
-                        <AnchorPane prefHeight="1041.0" prefWidth="179.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <VBox alignment="CENTER" layoutX="2.0" layoutY="204.0" prefHeight="752.0" prefWidth="176.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <RadioButton mnemonicParsing="false" text="Input 1">
+                                 </right>
+                                 <top>
+                                    <Label prefHeight="140.0" prefWidth="174.0" text="Hidden Layers" BorderPane.alignment="TOP_LEFT">
+                                       <padding>
+                                          <Insets left="20.0" top="20.0" />
+                                       </padding>
                                        <font>
                                           <Font size="18.0" />
                                        </font>
-                                    </RadioButton>
-                                    <RadioButton layoutX="56.0" layoutY="386.0" mnemonicParsing="false" text="Input 2">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </RadioButton>
-                                    <RadioButton layoutX="44.0" layoutY="449.0" mnemonicParsing="false" text="Input 3">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </RadioButton>
-                                    <RadioButton layoutX="44.0" layoutY="423.0" mnemonicParsing="false" text="Input 4">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </RadioButton>
-                                    <RadioButton layoutX="56.0" layoutY="410.0" mnemonicParsing="false" text="Input 5">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </RadioButton>
-                                    <RadioButton layoutX="56.0" layoutY="363.0" mnemonicParsing="false" text="Input 6">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </RadioButton>
-                                 </children>
-                              </VBox>
+                                    </Label>
+                                 </top>
+                              </BorderPane>
                            </children>
                         </AnchorPane>
                      </center>

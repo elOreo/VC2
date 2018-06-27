@@ -104,7 +104,7 @@ public class Main extends Application
     public void start(Stage stage) throws Exception{
         
         
-        URL mainWindow = Resources.getResource("PreceptronProV2.fxml");
+        URL mainWindow = Resources.getResource("PerceptronProV3.fxml");
         Parent root = FXMLLoader.load(mainWindow);
         
         Scene scene = new Scene(root, Screen.getPrimary().getBounds().getWidth()-10, Screen.getPrimary().getBounds().getHeight()-80);
