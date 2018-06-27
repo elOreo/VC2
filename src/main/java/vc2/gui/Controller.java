@@ -42,6 +42,8 @@ public class Controller implements Initializable {
     private Circle neuronCircleReLU;
     @FXML
     private Circle neuronCircleSigmoid;
+    @FXML
+    private Circle neuronCircleTanh;
     
     
     /**
@@ -82,18 +84,25 @@ public class Controller implements Initializable {
         boolean success = false;
         if (db.hasString()) {
             if (db.getString().equals("neuronCircleSigmoid")) {
-                System.out.println("angekommen");
-                Circle c = new Circle(event.getX(), event.getY(), 100, Color.BLUE);
-                c.setFill(Color.BLUE);
+                Circle c = new Circle(event.getX(), event.getY(), 20, Color.BLUE);
+                c.setFill(Color.web("#9fbcd7"));
+                c.setStroke(Color.web("#3c43bf"));
                 midAnchorPane.getChildren().add(c);
                 success = true;
             } else if (db.getString().equals("neuronCircleReLU")) {
-                Circle c = new Circle(event.getX(), event.getY(), 100, Color.RED);
-                c.setFill(Color.RED);
+                Circle c = new Circle(event.getX(), event.getY(), 20, Color.RED);
+                c.setFill(Color.web("#f53857"));
+                c.setStroke(Color.web("#800822"));
+                midAnchorPane.getChildren().add(c);
+                success = true;
+            } else if (db.getString().equals("neuronCircleTanh")) {
+                Circle c = new Circle(event.getX(), event.getY(), 20, Color.GREEN);
+                c.setFill(Color.web("#7ddd42"));
+                c.setStroke(Color.web("#275700"));
                 midAnchorPane.getChildren().add(c);
                 success = true;
             }
-
+            
         }
         event.setDropCompleted(success);
         event.consume();
@@ -104,7 +113,7 @@ public class Controller implements Initializable {
         Dragboard db = neuronCircleSigmoid.startDragAndDrop(TransferMode.ANY);
 
         ClipboardContent content = new ClipboardContent();
-        content.putString("circle");
+        content.putString("neuronCircleSigmoid");
         db.setContent(content);
         SnapshotParameters param = new SnapshotParameters();
         param.setFill(Color.TRANSPARENT);
@@ -118,11 +127,25 @@ public class Controller implements Initializable {
         Dragboard db = neuronCircleReLU.startDragAndDrop(TransferMode.ANY);
 
         ClipboardContent content = new ClipboardContent();
-        content.putString("circle");
+        content.putString("neuronCircleReLU");
         db.setContent(content);
         SnapshotParameters param = new SnapshotParameters();
         param.setFill(Color.TRANSPARENT);
         db.setDragView(neuronCircleReLU.snapshot(param, null));
+
+        event.consume();
+    }
+    
+    @FXML
+    private void circleTanhDragDetected(MouseEvent event) {
+        Dragboard db = neuronCircleTanh.startDragAndDrop(TransferMode.ANY);
+
+        ClipboardContent content = new ClipboardContent();
+        content.putString("neuronCircleTanh");
+        db.setContent(content);
+        SnapshotParameters param = new SnapshotParameters();
+        param.setFill(Color.TRANSPARENT);
+        db.setDragView(neuronCircleTanh.snapshot(param, null));
 
         event.consume();
     }

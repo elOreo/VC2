@@ -45,14 +45,14 @@ import vc2.backprop.TrainingInput;
  *
  * @author Tobias
  */
-public class Main //extends Application
+public class Main extends Application
 {
 
     
     public static void main(String args[]){
         //Loader.loadData().ifPresent(data->data.forEach(adult->System.out.println(Arrays.toString(adult.getVector()))));
-        //launch(args);
-        
+        launch(args);
+        /*
         Neuron in = new InputNeuron(0);
         Neuron in2 = new InputNeuron(1);
         Neuron hl = new TanhNeuron();
@@ -96,21 +96,21 @@ public class Main //extends Application
         double[] xor22 = nw.predict(new double[]{0, 1});
         double[] xor33 = nw.predict(new double[]{1, 0});
         double[] xor44 = nw.predict(new double[]{1, 1});
-        
+        */
     }
     
     
-    //@Override
+    @Override
     public void start(Stage stage) throws Exception{
         
         
         URL mainWindow = Resources.getResource("PreceptronProV2.fxml");
         Parent root = FXMLLoader.load(mainWindow);
         
-        Scene scene = new Scene(root, Screen.getPrimary().getBounds().getWidth(), Screen.getPrimary().getBounds().getHeight());
+        Scene scene = new Scene(root, Screen.getPrimary().getBounds().getWidth()-10, Screen.getPrimary().getBounds().getHeight()-80);
         stage.setTitle("PercepronicPro");
         stage.setScene(scene);
-        stage.fullScreenProperty();
+        //stage.fullScreenProperty();
         stage.show();
         
         /*URL popUpWindow = Resources.getResource("PerceptronicProPopUp.fxml");
