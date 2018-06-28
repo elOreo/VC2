@@ -108,10 +108,10 @@
                                           <Insets right="20.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField prefHeight="25.0" prefWidth="58.0" />
+                                    <TextField fx:id="txtLearnRate" prefHeight="25.0" prefWidth="58.0" text="0" />
                                  </children>
                               </HBox>
-                              <Slider prefHeight="14.0" prefWidth="103.0" />
+                              <Slider fx:id="sldLearnRate" blockIncrement="0.1" majorTickUnit="0.1" max="1.0" minorTickCount="1" onMouseDragged="#learnRateChange" prefHeight="14.0" prefWidth="103.0" />
                            </children>
                         </VBox>
                         <VBox layoutX="10.0" layoutY="233.0" spacing="10.0">
@@ -123,10 +123,10 @@
                                           <Insets right="20.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField prefHeight="25.0" prefWidth="58.0" />
+                                    <TextField fx:id="txtBreakBy" prefHeight="25.0" prefWidth="58.0" text="0" />
                                  </children>
                               </HBox>
-                              <Slider prefHeight="14.0" prefWidth="103.0" />
+                              <Slider fx:id="sldBreakBy" blockIncrement="0.1" majorTickUnit="0.1" max="0.1" minorTickCount="1" onMouseDragged="#breakByChange" prefHeight="14.0" prefWidth="103.0" />
                            </children>
                         </VBox>
                         <VBox layoutX="10.0" layoutY="302.0" spacing="10.0">
@@ -138,10 +138,10 @@
                                           <Insets right="20.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField prefHeight="25.0" prefWidth="58.0" />
+                                    <TextField fx:id="txtMaxItterations" prefHeight="25.0" prefWidth="58.0" text="1" />
                                  </children>
                               </HBox>
-                              <Slider prefHeight="14.0" prefWidth="103.0" />
+                              <Slider fx:id="sldMaxItterations" blockIncrement="1.0" majorTickUnit="1.0" max="100000.0" min="1.0" minorTickCount="1" onMouseDragged="#maxItterationsChange" prefHeight="14.0" prefWidth="103.0" snapToTicks="true" value="1.0" />
                            </children>
                         </VBox>
                         <Separator layoutX="10.0" layoutY="215.0" prefWidth="200.0" />

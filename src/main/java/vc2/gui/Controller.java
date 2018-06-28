@@ -16,6 +16,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -59,6 +61,18 @@ public class Controller implements Initializable {
     private HBox layerBox;
     @FXML
     private Button btnStartTraining;
+    @FXML
+    private TextField txtLearnRate;
+    @FXML
+    private TextField txtBreakBy;
+    @FXML
+    private TextField txtMaxItterations;
+    @FXML
+    private Slider sldLearnRate;
+    @FXML
+    private Slider sldBreakBy;
+    @FXML
+    private Slider sldMaxItterations;
     
     private static NeuronType actDrag;
     private NetworkTopology ntp;
@@ -72,18 +86,31 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Layer input = new Layer();
+        int i = 0;
+        while(i < 10){
         input.addNeuron(NeuronType.Input);
-        input.addNeuron(NeuronType.Input);
+        i++;
+        }
         Layer output = new Layer();
         output.addNeuron(NeuronType.TanH);
         layerBox.getChildren().add(input);
         layerBox.getChildren().add(output);
+        
     }    
     
     
-    
-
-    
+    @FXML
+    private void learnRateChange(MouseEvent event){
+        txtLearnRate.setText(Double.toString(sldLearnRate.getValue()));
+    }
+    @FXML
+    private void breakByChange(MouseEvent event){
+        txtBreakBy.setText(Double.toString(sldBreakBy.getValue()));
+    }
+    @FXML
+    private void maxItterationsChange(MouseEvent event){
+        txtMaxItterations.setText(Double.toString(sldMaxItterations.getValue()));
+    }
 
     
 
@@ -138,6 +165,8 @@ public class Controller implements Initializable {
     private void circleDragDone(DragEvent event) {
         event.consume();
     }
+    
+    
    
     @FXML
     private void addLayer(MouseEvent event){
