@@ -5,7 +5,8 @@
  */
 package vc2.gui;
 
-import java.util.ArrayList;
+
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
@@ -16,7 +17,7 @@ import javafx.scene.layout.VBox;
  */
 public class Layer extends VBox{
    
-    private ArrayList<NeuronType> neuronTypes = new ArrayList<>();
+   
     
     public Layer(){
         super();
@@ -25,7 +26,7 @@ public class Layer extends VBox{
         this.setPrefWidth(100);
         this.setMinWidth(USE_PREF_SIZE);
         this.setStyle("-fx-border-color: black");
-        this.setOnDragDropped(event -> addNeuron(NeuronType.Sigmoid));
+        this.setOnDragDropped(event -> addNeuron(Controller.getActDrag()));
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.MOVE);
             event.consume();
@@ -36,4 +37,11 @@ public class Layer extends VBox{
         this.getChildren().add(new NeuronCircle(type));
     }
     
+    public int getNeuronCount(){
+        return getChildren().size();
+    }
+    
+    public ObservableList getNeurons(){
+        return this.getChildren();
+    }
 }

@@ -29,6 +29,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import vc2.backprop.NetworkTopology;
+import vc2.backprop.ReLUNeuron;
+import vc2.backprop.SigmoidNeuron;
+import vc2.backprop.TanhNeuron;
 
 /**
  * FXML Controller class
@@ -53,6 +57,11 @@ public class Controller implements Initializable {
     private Pane leftPane; 
     @FXML
     private HBox layerBox;
+    @FXML
+    private Button btnStartTraining;
+    
+    private static NeuronType actDrag;
+    private NetworkTopology ntp;
     
     
     /**
@@ -72,59 +81,17 @@ public class Controller implements Initializable {
     }    
     
     
-    @FXML
-    private void onDragEntered(DragEvent event) {
-        
-        event.consume();
-    }
     
-    @FXML
-    private void onDragExited(DragEvent event) {
-        
-        event.consume();
-    }
 
-    @FXML
-    private void onDragOver(DragEvent event) {
-        if (event.getGestureSource() != midAnchorPane
-                && event.getDragboard().hasString()) {
-            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-        }
-        event.consume();
-    }
+    
 
-    @FXML
-    private void onDragDropped(DragEvent event) {
-        Dragboard db = event.getDragboard();
-        boolean success = false;
-        if (db.hasString()) {
-            if (db.getString().equals("neuronCircleSigmoid")) {
-                
-                
-                success = true;
-            } else if (db.getString().equals("neuronCircleReLU")) {
-                Circle c = new Circle(event.getX(), event.getY(), 20, Color.RED);
-                c.setFill(Color.web("#f53857"));
-                c.setStroke(Color.web("#800822"));
-                midAnchorPane.getChildren().add(c);
-                success = true;
-            } else if (db.getString().equals("neuronCircleTanh")) {
-                Circle c = new Circle(event.getX(), event.getY(), 20, Color.GREEN);
-                c.setFill(Color.web("#7ddd42"));
-                c.setStroke(Color.web("#275700"));
-                midAnchorPane.getChildren().add(c);
-                success = true;
-            }
-            
-        }
-        event.setDropCompleted(success);
-        event.consume();
-    }
+    
 
     @FXML
     private void circleSigmoidDragDetected(MouseEvent event) {
+        
+        actDrag = NeuronType.Sigmoid;
         Dragboard db = neuronCircleSigmoid.startDragAndDrop(TransferMode.ANY);
-        System.out.println("Hallo");
         ClipboardContent content = new ClipboardContent();
         content.putString("neuronCircleSigmoid");
         db.setContent(content);
@@ -137,6 +104,8 @@ public class Controller implements Initializable {
     
      @FXML
     private void circleReLUDragDetected(MouseEvent event) {
+        
+        actDrag = NeuronType.ReLU;
         Dragboard db = neuronCircleReLU.startDragAndDrop(TransferMode.ANY);
 
         ClipboardContent content = new ClipboardContent();
@@ -151,6 +120,8 @@ public class Controller implements Initializable {
     
     @FXML
     private void circleTanhDragDetected(MouseEvent event) {
+        
+        actDrag = NeuronType.TanH;
         Dragboard db = neuronCircleTanh.startDragAndDrop(TransferMode.ANY);
 
         ClipboardContent content = new ClipboardContent();
@@ -171,8 +142,63 @@ public class Controller implements Initializable {
     @FXML
     private void addLayer(MouseEvent event){
         Layer layer = new Layer();
-        layerBox.getChildren().add(layer);
+        layerBox.getChildren().add(1, layer);
     }
+    
+    @FXML
+    private void startTraining(){
+
+        int sigmoidOA = 0;
+        int reluOA = 0;
+        int tanhOA = 0;
+        
+        for(Object l : layerBox.getChildren()){
+            Layer layer = (Layer) l;
+            
+            for(Object c : layer.getChildren()){
+                
+                int sigmoid = 0;
+                int relu = 0;
+                int tanh = 0;
+                
+                NeuronCircle circle = (NeuronCircle) c;
+                
+                if(circle.getNeuronType() == NeuronType.Sigmoid){
+                    sigmoid ++;
+                    sigmoidOA++;
+                }
+                if(circle.getNeuronType() == NeuronType.ReLU){
+                    relu ++;
+                    reluOA ++;
+                }
+                if(circle.getNeuronType() == NeuronType.TanH){
+                    tanh ++;
+                    tanhOA ++;
+                }
+               
+                for(int i = 0; i == sigmoid; i++){
+                    ntp.createFactory().addNeuron(new SigmoidNeuron());
+                }
+                for(int i = 0; i == relu; i++){
+                    ntp.createFactory().addNeuron(new ReLUNeuron());
+                }
+                for(int i = 0; i == tanh; i++){
+                    ntp.createFactory().addNeuron(new TanhNeuron());
+                }
+            }        
+            System.out.println("sigmoidOA: " + sigmoidOA);
+            System.out.println("reluOA: " + reluOA);
+            System.out.println("tanhOA: " + tanhOA);
+            System.out.println("--------------------------");        }
+     
+        
+        
+    }
+    
+    public static NeuronType getActDrag(){
+        return actDrag;
+    }
+    
        
 }
 
