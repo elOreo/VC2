@@ -4,12 +4,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
+import vc2.gui.Controller;
 import vc2.utils.MapUtils;
 
 public class Network {
@@ -117,6 +120,12 @@ public class Network {
             result = learn(learnFactor, trainingInputs);
         }
         return result;
+    }
+    public double learnConverge(double threshold, int maxIterations, double learnFactor, Collection<? extends Input> inputs){
+        
+        ArrayList<TrainingInput> trainingInputs = inputs.stream().map(TrainingInput::new).collect(Collectors.toCollection(ArrayList::new));
+        return learnConverge(threshold, maxIterations, learnFactor, trainingInputs);
+        
     }
     
 }

@@ -18,9 +18,10 @@ public class NeuronCircle extends Circle {
     
     public NeuronCircle(NeuronType type){
         this.type = type;
-        this.setRadius(20);
+        this.setRadius(5);
         
         switch (type) {
+            
             case Sigmoid:
                 this.setFill(Paint.valueOf("#ff1f1f"));
                 break;

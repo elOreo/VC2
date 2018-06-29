@@ -17,20 +17,32 @@ import javafx.scene.layout.VBox;
  */
 public class Layer extends VBox{
    
+    private boolean editable = true;
    
     
     public Layer(){
         super();
-        this.setSpacing(10);
+        this.setSpacing(5);
         this.setAlignment(Pos.CENTER);
         this.setPrefWidth(100);
         this.setMinWidth(USE_PREF_SIZE);
         this.setStyle("-fx-border-color: black");
         this.setOnDragDropped(event -> addNeuron(Controller.getActDrag()));
         this.setOnDragOver(event -> {
+            if(!this.editable){
+                return;
+            }
             event.acceptTransferModes(TransferMode.MOVE);
             event.consume();
         });
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
     
     public void addNeuron(NeuronType type){
@@ -44,4 +56,5 @@ public class Layer extends VBox{
     public ObservableList getNeurons(){
         return this.getChildren();
     }
+    
 }

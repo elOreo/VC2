@@ -19,6 +19,11 @@ public class TrainingInput{
         this.out = out;
     }
     
+    public TrainingInput(Input input){
+        this.in = input.getVector();
+        this.out = input.getOutput();
+    }
+    
     
     public double[] getIn(){
         return this.in;

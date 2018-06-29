@@ -11,4 +11,6 @@ package vc2.backprop;
  */
 public interface Input {
     public double[] getVector();
+    
+    public double[] getOutput();
 }

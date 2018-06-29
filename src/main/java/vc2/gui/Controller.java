@@ -10,12 +10,15 @@ package vc2.gui;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ClipboardContent;
@@ -31,10 +34,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import vc2.backprop.InputNeuron;
+import vc2.backprop.Network;
 import vc2.backprop.NetworkTopology;
+import vc2.backprop.NetworkTopology.NetworkTopologyFactory;
+import vc2.backprop.Neuron;
 import vc2.backprop.ReLUNeuron;
 import vc2.backprop.SigmoidNeuron;
 import vc2.backprop.TanhNeuron;
+import vc2.data.Adult;
+import vc2.data.Loader;
 
 /**
  * FXML Controller class
@@ -73,10 +82,46 @@ public class Controller implements Initializable {
     private Slider sldBreakBy;
     @FXML
     private Slider sldMaxItterations;
+    @FXML
+    private TextField txtAge;
+    @FXML
+    private TextField txtWorkclass;
+    @FXML
+    private TextField txtfnlwgt;
+    @FXML
+    private TextField txtEducation;
+    @FXML
+    private TextField txtEducationNum;
+    @FXML
+    private TextField txtMaritalStatus;
+    @FXML
+    private TextField txtOccupation;
+    @FXML
+    private TextField txtRelationship;
+    @FXML
+    private TextField txtRace;
+    @FXML
+    private TextField txtSex;
+    @FXML
+    private TextField txtCapitalGain;
+    @FXML
+    private TextField txtCapitalLoss;
+    @FXML
+    private TextField txtHoursPerWeek;
+    @FXML
+    private TextField txtNativeCountry;
+    @FXML
+    private TextField txtPrediction;
+    @FXML
+    private Button btnPredict;
+    @FXML
+    private Label lblLeftStatus;
+    @FXML
+    private Label lblRightStatus;
     
     private static NeuronType actDrag;
-    private NetworkTopology ntp;
-    
+    private Network nw;
+    private Collection<Adult> adults;
     
     /**
      * Initializes the controller class.
@@ -87,15 +132,17 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         Layer input = new Layer();
         int i = 0;
-        while(i < 10){
+        while(i < Adult.vectorSize){
         input.addNeuron(NeuronType.Input);
         i++;
         }
         Layer output = new Layer();
         output.addNeuron(NeuronType.TanH);
+        input.setEditable(false);
+        output.setEditable(false);
         layerBox.getChildren().add(input);
         layerBox.getChildren().add(output);
-        
+        Loader.loadData().ifPresent(data -> adults = data);
     }    
     
     
@@ -176,56 +223,89 @@ public class Controller implements Initializable {
     
     @FXML
     private void startTraining(){
-
-        int sigmoidOA = 0;
-        int reluOA = 0;
-        int tanhOA = 0;
+        lblLeftStatus.setText("Training Network...");
+        int i = 0;
+        NetworkTopologyFactory ntpf = NetworkTopology.createFactory();
+        Neuron[][] neurons = new Neuron[layerBox.getChildren().size()][];   
         
         for(Object l : layerBox.getChildren()){
             Layer layer = (Layer) l;
+            neurons[i] = new Neuron[layer.getChildren().size()];
+            int j = 0;
             
             for(Object c : layer.getChildren()){
-                
-                int sigmoid = 0;
-                int relu = 0;
-                int tanh = 0;
+                Neuron n = null;
                 
                 NeuronCircle circle = (NeuronCircle) c;
-                
-                if(circle.getNeuronType() == NeuronType.Sigmoid){
-                    sigmoid ++;
-                    sigmoidOA++;
+                switch (circle.getNeuronType()) {
+                    case Input:
+                        n = new InputNeuron(j);
+                    case Sigmoid:
+                        n = new SigmoidNeuron();
+                        break;
+                    case ReLU:
+                        n = new ReLUNeuron();
+                        break;
+                    case TanH:
+                        n = new TanhNeuron();
+                        break;
+                    default:
+                        break;
                 }
-                if(circle.getNeuronType() == NeuronType.ReLU){
-                    relu ++;
-                    reluOA ++;
+                if(i == neurons.length - 1){
+                ntpf.addOutputNeuron(n, j);
                 }
-                if(circle.getNeuronType() == NeuronType.TanH){
-                    tanh ++;
-                    tanhOA ++;
+                else{
+                    ntpf.addNeuron(n);
                 }
-               
-                for(int i = 0; i == sigmoid; i++){
-                    ntp.createFactory().addNeuron(new SigmoidNeuron());
+                    neurons[i][j++] = n;
+            }  
+            i++;
+        }
+  
+        for(i= 1; i < neurons.length; i++){
+            for(int j= 0; j< neurons[i].length; j++){
+                for(int k= 0; k < neurons[i-1].length; k++){
+                    ntpf.addAxon(neurons[i-1][k], neurons[i][j]);
                 }
-                for(int i = 0; i == relu; i++){
-                    ntp.createFactory().addNeuron(new ReLUNeuron());
-                }
-                for(int i = 0; i == tanh; i++){
-                    ntp.createFactory().addNeuron(new TanhNeuron());
-                }
-            }        
-            System.out.println("sigmoidOA: " + sigmoidOA);
-            System.out.println("reluOA: " + reluOA);
-            System.out.println("tanhOA: " + tanhOA);
-            System.out.println("--------------------------");        }
-     
-        
-        
+            } 
+        }
+        nw = new Network(ntpf.build());
+        CompletableFuture.supplyAsync(()->{
+            return nw.learnConverge(sldBreakBy.getValue(), (int) sldMaxItterations.getValue() , sldLearnRate.getValue(), adults);
+        }).thenAccept(x->{});
+        lblLeftStatus.setText("Training Finished");
     }
+    
     
     public static NeuronType getActDrag(){
         return actDrag;
+    }
+    
+    @FXML
+    private void predict(){
+        lblRightStatus.setText("Predicting...");
+        if(nw == null) return;
+        
+        double[] out = nw.predict(new Adult(
+        txtAge.getText(),
+        txtWorkclass.getText(),
+        txtfnlwgt.getText(),
+        txtEducation.getText(),
+        txtEducationNum.getText(),
+        txtMaritalStatus.getText(),
+        txtOccupation.getText(),
+        txtRelationship.getText(),
+        txtRace.getText(),
+        txtSex.getText(),
+        txtCapitalGain.getText(),
+        txtCapitalLoss.getText(),
+        txtHoursPerWeek.getText(),
+        txtNativeCountry.getText()
+        ));
+        
+        txtPrediction.setText(out[0] > 0.5?">50K":"<=50K");
+        lblRightStatus.setText("No Predicton in Progress");
     }
     
        

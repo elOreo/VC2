@@ -38,6 +38,8 @@ public class Adult implements Input{
     private final int capitalLoss;
     private final int hoursPerWeek;
     private final String nativeCountry;
+    private final String income;
+    public final static int vectorSize = 6+workclasses.length+educations.length+maritalStatuses.length+occupations.length+relationships.length+races.length+sexes.length+nativeCountries.length;
 
     public Adult(
         String age,
@@ -53,7 +55,10 @@ public class Adult implements Input{
         String capitalGain,
         String capitalLoss,
         String hoursPerWeek,
-        String nativeCountry)
+        String nativeCountry,
+        String income
+    )
+        
     {
 
         this.age = Integer.parseInt(age);
@@ -70,10 +75,47 @@ public class Adult implements Input{
         this.capitalLoss = Integer.parseInt(capitalLoss);
         this.hoursPerWeek = Integer.parseInt(hoursPerWeek);
         this.nativeCountry = nativeCountry;
+        this.income = income;
+    }
+    
+     public Adult(
+        String age,
+        String workclass,
+        String fnlwgt,
+        String education,
+        String educationNum,
+        String maritalStatus,
+        String occupation,
+        String relationship,
+        String race,
+        String sex,
+        String capitalGain,
+        String capitalLoss,
+        String hoursPerWeek,
+        String nativeCountry
+
+    )
+    {
+        
+        this(age,
+        workclass,
+        fnlwgt,
+        education,
+        educationNum,
+        maritalStatus,
+        occupation,
+        relationship,
+        race,
+        sex,
+        capitalGain,
+        capitalLoss,
+        hoursPerWeek,
+        nativeCountry,
+        null);
     }
 
     public Adult(String[] data){
-        this(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13]);
+        this(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10], data[11], data[12], data[13], data[14]);
     }
 
     public int getAge() {
@@ -140,7 +182,7 @@ public class Adult implements Input{
 
     @Override
     public double[] getVector() {
-        double[] result = new double[6+workclasses.length+educations.length+maritalStatuses.length+occupations.length+relationships.length+races.length+sexes.length+nativeCountries.length];
+        double[] result = new double[vectorSize];
         int index = 0;
         result[index++] = age;
         index = fillVector(workclass, workclasses, result, index);
@@ -158,4 +200,10 @@ public class Adult implements Input{
         index = fillVector(nativeCountry, nativeCountries, result, index);
         return result;
     }
+
+    @Override
+    public double[] getOutput() {
+        return income == null ? new double[]{} : new double[] {income.equals(">50K") ? 1 : 0};
+    }
+    
 }
